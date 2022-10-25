@@ -4,13 +4,17 @@ import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
 import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
-
-const formatDateStr = (str) => {
-	return str.split('T')[0].split('-').reverse().join('/');
-};
+import { formatDateStr } from '../utils';
 
 const DataTable = ({ apiData = [] }) => {
 	console.log('apiData ==>> ', apiData);
+	const [paginationProps, setPaginationProps] = useState({
+		limit: 5,
+		page: 1,
+		offset: 0,
+		total: 0,
+		maxPages: 1,
+	});
 	const [selectedData, setSelectedData] = useState({
 		data: null,
 		action: null,
