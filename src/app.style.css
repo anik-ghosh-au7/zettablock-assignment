@@ -96,7 +96,7 @@ th:nth-child(1) {
 	justify-content: space-around;
 	align-items: center;
 	height: 100%;
-	max-height: fill-available;
+	max-height: stretch;
 }
 
 [data-column='actions'] button {
