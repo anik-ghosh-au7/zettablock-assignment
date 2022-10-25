@@ -10,6 +10,7 @@ body {
 	flex-direction: column;
 	margin: auto;
 }
+
 h2 {
 	font-weight: 500;
 }
@@ -126,4 +127,10 @@ th:nth-child(1) {
 
 [data-column='actions'] > input {
 	margin: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+	.container {
+		width: 95%;
+	}
 }
