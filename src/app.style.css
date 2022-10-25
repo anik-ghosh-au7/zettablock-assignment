@@ -16,6 +16,7 @@ h2 {
 
 table {
 	width: 100%;
+	height: 100%;
 	border-collapse: collapse;
 	margin: 50px auto;
 }
@@ -94,6 +95,8 @@ th:nth-child(1) {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	height: 100%;
+	max-height: fill-available;
 }
 
 [data-column='actions'] button {
