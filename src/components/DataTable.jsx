@@ -1,11 +1,10 @@
 import React from 'react';
-import { ReactComponent as DeleteSvg } from './icons/delete.svg';
-import { ReactComponent as EditSvg } from './icons/edit.svg';
-import { ReactComponent as MaximizeSvg } from './icons/maximize.svg';
-import { ReactComponent as MinimizeSvg } from './icons/minimize.svg';
-import './app.style.css';
+import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
+import { ReactComponent as EditSvg } from '../icons/edit.svg';
+import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
+import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
 
-const App = () => {
+const DataTable = () => {
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
@@ -68,4 +67,4 @@ const App = () => {
 	);
 };
 
-export default App;
+export default DataTable;
