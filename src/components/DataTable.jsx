@@ -22,8 +22,8 @@ const DataTable = ({ apiData = [] }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{apiData.map((data) => (
-						<tr>
+					{apiData.slice(0, 6).map((data) => (
+						<tr key={data.id}>
 							<td data-column="actions">
 								<div>
 									<button>
