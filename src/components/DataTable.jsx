@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { actionTypes } from '../constants';
 import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
@@ -10,7 +11,13 @@ const formatDateStr = (str) => {
 
 const DataTable = ({ apiData = [] }) => {
 	console.log('apiData ==>> ', apiData);
-	const [selectedData, setSelectedData] = useState();
+	const [selectedData, setSelectedData] = useState({
+		data: null,
+		action: null,
+	});
+	const actionHandler = async (currentAction, currentData) => {
+		setSelectedData({ action: currentAction, data: currentData });
+	};
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
@@ -33,20 +40,39 @@ const DataTable = ({ apiData = [] }) => {
 							<tr key={data.id}>
 								<td data-column="actions">
 									<div>
-										<button>
+										<button
+											onClick={() => actionHandler(actionTypes.DELETE, data)}
+										>
 											<DeleteSvg />
 										</button>
-										<button>
+										<button
+											onClick={() => actionHandler(actionTypes.EDIT, data)}
+										>
 											<EditSvg />
 										</button>
-										<button>
-											<MaximizeSvg />
-										</button>
+										{selectedData.action === actionTypes.MAXIMIZE &&
+										selectedData.data?.id === data.id ? (
+											<button
+												onClick={() =>
+													actionHandler(actionTypes.MINIMIZE, data)
+												}
+											>
+												<MinimizeSvg />
+											</button>
+										) : (
+											<button
+												onClick={() =>
+													actionHandler(actionTypes.MAXIMIZE, data)
+												}
+											>
+												<MaximizeSvg />
+											</button>
+										)}
 									</div>
 									<input
-										type="radio"
 										readOnly
-										checked={selectedData?.id === data.id}
+										type="radio"
+										checked={selectedData.data?.id === data.id}
 									></input>
 								</td>
 								<td data-column="id">{data.id}</td>
@@ -56,16 +82,19 @@ const DataTable = ({ apiData = [] }) => {
 								<td data-column="createdAt">{formatDateStr(data.createdAt)}</td>
 								<td data-column="updatedAt">{formatDateStr(data.updatedAt)}</td>
 							</tr>
-							<tr style={{ display: 'visible' }}>
-								<td colSpan="7">
-									<br />
-									hidden row
-									<br />
-									hidden row
-									<br />
-									hidden row
-								</td>
-							</tr>
+							{selectedData.action === actionTypes.MAXIMIZE &&
+								selectedData.data?.id === data.id && (
+									<tr>
+										<td colSpan="7">
+											<br />
+											hidden row
+											<br />
+											hidden row
+											<br />
+											hidden row
+										</td>
+									</tr>
+								)}
 						</Fragment>
 					))}
 				</tbody>
