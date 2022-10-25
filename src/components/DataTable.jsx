@@ -4,7 +4,8 @@ import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
 import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
-import { formatDateStr } from '../utils';
+import { ReactComponent as CopySvg } from '../icons/copy.svg';
+import { formatDateStr, copyTextToClipboard } from '../utils';
 
 const DataTable = ({ apiData = [] }) => {
 	console.log('apiData ==>> ', apiData);
@@ -39,68 +40,78 @@ const DataTable = ({ apiData = [] }) => {
 				</thead>
 				<tbody>
 					{/* for testing */}
-					{apiData.slice(0, 6).map((data) => (
-						<Fragment key={data.id}>
-							<tr key={data.id}>
-								<td data-column="actions">
-									<div>
-										<button
-											onClick={() => actionHandler(actionTypes.DELETE, data)}
-										>
-											<DeleteSvg />
-										</button>
-										<button
-											onClick={() => actionHandler(actionTypes.EDIT, data)}
-										>
-											<EditSvg />
-										</button>
-										{selectedData.action === actionTypes.MAXIMIZE &&
-										selectedData.data?.id === data.id ? (
+					{apiData.slice(0, 6).map((data) => {
+						const strData = JSON.stringify(data, null, '\t').replace(
+							/\\n/g,
+							''
+						);
+						return (
+							<Fragment key={data.id}>
+								<tr key={data.id}>
+									<td data-column="actions">
+										<div>
 											<button
-												onClick={() =>
-													actionHandler(actionTypes.MINIMIZE, data)
-												}
+												onClick={() => actionHandler(actionTypes.DELETE, data)}
 											>
-												<MinimizeSvg />
+												<DeleteSvg />
 											</button>
-										) : (
 											<button
-												onClick={() =>
-													actionHandler(actionTypes.MAXIMIZE, data)
-												}
+												onClick={() => actionHandler(actionTypes.EDIT, data)}
 											>
-												<MaximizeSvg />
+												<EditSvg />
 											</button>
-										)}
-									</div>
-									<input
-										readOnly
-										type="radio"
-										checked={selectedData.data?.id === data.id}
-									></input>
-								</td>
-								<td data-column="id">{data.id}</td>
-								<td data-column="name">{data.name}</td>
-								<td data-column="type">{data.type}</td>
-								<td data-column="description">{data.description}</td>
-								<td data-column="createdAt">{formatDateStr(data.createdAt)}</td>
-								<td data-column="updatedAt">{formatDateStr(data.updatedAt)}</td>
-							</tr>
-							{selectedData.action === actionTypes.MAXIMIZE &&
-								selectedData.data?.id === data.id && (
-									<tr>
-										<td colSpan="7">
-											<br />
-											hidden row
-											<br />
-											hidden row
-											<br />
-											hidden row
-										</td>
-									</tr>
-								)}
-						</Fragment>
-					))}
+											{selectedData.action === actionTypes.MAXIMIZE &&
+											selectedData.data?.id === data.id ? (
+												<button
+													onClick={() =>
+														actionHandler(actionTypes.MINIMIZE, data)
+													}
+												>
+													<MinimizeSvg />
+												</button>
+											) : (
+												<button
+													onClick={() =>
+														actionHandler(actionTypes.MAXIMIZE, data)
+													}
+												>
+													<MaximizeSvg />
+												</button>
+											)}
+										</div>
+										<input
+											readOnly
+											type="radio"
+											checked={selectedData.data?.id === data.id}
+										></input>
+									</td>
+									<td data-column="id">{data.id}</td>
+									<td data-column="name">{data.name}</td>
+									<td data-column="type">{data.type}</td>
+									<td data-column="description">{data.description}</td>
+									<td data-column="createdAt">
+										{formatDateStr(data.createdAt)}
+									</td>
+									<td data-column="updatedAt">
+										{formatDateStr(data.updatedAt)}
+									</td>
+								</tr>
+								{selectedData.action === actionTypes.MAXIMIZE &&
+									selectedData.data?.id === data.id && (
+										<tr>
+											<td colSpan="7">
+												<code className="json__content">
+													<pre>{strData}</pre>
+													<button onClick={() => copyTextToClipboard(strData)}>
+														<CopySvg />
+													</button>
+												</code>
+											</td>
+										</tr>
+									)}
+							</Fragment>
+						);
+					})}
 				</tbody>
 			</table>
 			<div className="pagination-container">
