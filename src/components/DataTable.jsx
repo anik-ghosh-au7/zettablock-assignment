@@ -4,7 +4,8 @@ import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
 import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
 
-const DataTable = () => {
+const DataTable = ({ apiData = [] }) => {
+	console.log('apiData ==>> ', apiData);
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
@@ -21,28 +22,30 @@ const DataTable = () => {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td data-column="actions">
-							<div>
-								<button>
-									<DeleteSvg />
-								</button>
-								<button>
-									<EditSvg />
-								</button>
-								<button>
-									<MaximizeSvg />
-								</button>
-							</div>
-							<input type="radio" checked="checked"></input>
-						</td>
-						<td data-column="First Name">James</td>
-						<td data-column="Last Name">Matman</td>
-						<td data-column="Job Title">Chief Sandwich Eater</td>
-						<td data-column="Twitter">@james</td>
-						<td data-column="created_at">@james</td>
-						<td data-column="updated_at">@james</td>
-					</tr>
+					{apiData.map((data) => (
+						<tr>
+							<td data-column="actions">
+								<div>
+									<button>
+										<DeleteSvg />
+									</button>
+									<button>
+										<EditSvg />
+									</button>
+									<button>
+										<MaximizeSvg />
+									</button>
+								</div>
+								<input type="radio" checked="checked"></input>
+							</td>
+							<td data-column="id">{data.id}</td>
+							<td data-column="name">{data.name}</td>
+							<td data-column="type">{data.type}</td>
+							<td data-column="description">{data.description}</td>
+							<td data-column="createdAt">{data.createdAt}</td>
+							<td data-column="updatedAt">{data.updatedAt}</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 			<div className="pagination-container">
