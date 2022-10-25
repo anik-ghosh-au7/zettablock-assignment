@@ -6,6 +6,9 @@ import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
 
 const DataTable = ({ apiData = [] }) => {
 	console.log('apiData ==>> ', apiData);
+	const formatDateStr = (str) => {
+		return str.split('T')[0].split('-').reverse().join('/');
+	};
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
@@ -42,8 +45,8 @@ const DataTable = ({ apiData = [] }) => {
 							<td data-column="name">{data.name}</td>
 							<td data-column="type">{data.type}</td>
 							<td data-column="description">{data.description}</td>
-							<td data-column="createdAt">{data.createdAt}</td>
-							<td data-column="updatedAt">{data.updatedAt}</td>
+							<td data-column="createdAt">{formatDateStr(data.createdAt)}</td>
+							<td data-column="updatedAt">{formatDateStr(data.updatedAt)}</td>
 						</tr>
 					))}
 				</tbody>
