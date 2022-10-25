@@ -4,12 +4,13 @@ import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
 import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
 
+const formatDateStr = (str) => {
+	return str.split('T')[0].split('-').reverse().join('/');
+};
+
 const DataTable = ({ apiData = [] }) => {
 	console.log('apiData ==>> ', apiData);
 	const [selectedData, setSelectedData] = useState();
-	const formatDateStr = (str) => {
-		return str.split('T')[0].split('-').reverse().join('/');
-	};
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
@@ -55,14 +56,16 @@ const DataTable = ({ apiData = [] }) => {
 								<td data-column="createdAt">{formatDateStr(data.createdAt)}</td>
 								<td data-column="updatedAt">{formatDateStr(data.updatedAt)}</td>
 							</tr>
-							<div style={{ display: 'none' }}>
-								<br />
-								hidden row
-								<br />
-								hidden row
-								<br />
-								hidden row
-							</div>
+							<tr style={{ display: 'visible' }}>
+								<td colSpan="7">
+									<br />
+									hidden row
+									<br />
+									hidden row
+									<br />
+									hidden row
+								</td>
+							</tr>
 						</Fragment>
 					))}
 				</tbody>
