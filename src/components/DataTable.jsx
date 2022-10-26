@@ -208,19 +208,14 @@ const DataTable = ({
 					type="text"
 					value={searchData.searchText}
 					onChange={searchInputHandler}
-					onKeyDown={() => {
-						searchData.searchText &&
-							setSearchData({
-								...searchData,
-								searchAction: searchOptions.SEARCH,
-							});
-					}}
-					onKeyPress={() => {
-						searchData.searchText &&
-							setSearchData({
-								...searchData,
-								searchAction: searchOptions.SEARCH,
-							});
+					onKeyPress={(e) => {
+						if (e.key === 'Enter') {
+							searchData.searchText &&
+								setSearchData({
+									...searchData,
+									searchAction: searchOptions.SEARCH,
+								});
+						}
 					}}
 					placeholder="Search for keywords"
 				></input>
@@ -305,6 +300,11 @@ const DataTable = ({
 											<input
 												value={selectedData.data.description}
 												onChange={descriptionInputHandler}
+												onKeyPress={(e) => {
+													if (e.key === 'Enter') {
+														actionHandler(actionTypes.SAVE, data);
+													}
+												}}
 											></input>
 										) : (
 											data.description
