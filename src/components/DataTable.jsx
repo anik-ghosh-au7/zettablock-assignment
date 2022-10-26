@@ -164,13 +164,11 @@ const DataTable = ({
 	}, [apiData]);
 	useEffect(() => {
 		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
-		if (apiData?.length) {
-			const updatedData = apiData.slice(
-				paginationData.offset,
-				paginationData.offset + paginationData.limit
-			);
-			setApiList(updatedData);
-		}
+		const updatedData = apiData.slice(
+			paginationData.offset,
+			paginationData.offset + paginationData.limit
+		);
+		setApiList(updatedData);
 	}, [apiData, paginationData]);
 	return (
 		<div className="container">
