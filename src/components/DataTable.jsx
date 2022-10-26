@@ -175,14 +175,21 @@ const DataTable = ({ apiInputData }) => {
 	useEffect(() => {
 		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
 		if (apiData?.length) {
-			setApiList(
-				apiData.slice(
-					paginationData.offset,
-					paginationData.offset + paginationData.limit
-				)
+			const updatedData = apiData.slice(
+				paginationData.offset,
+				paginationData.offset + paginationData.limit
 			);
+			searchData.searchAction === searchOptions.SEARCH && searchData.searchText
+				? setApiList(
+						updatedData.filter((data) =>
+							(data.name + data.description)
+								.toLowerCase()
+								.includes(searchData.searchText)
+						)
+				  )
+				: setApiList(updatedData);
 		}
-	}, [apiData, paginationData]);
+	}, [apiData, paginationData, searchData]);
 	useEffect(() => {
 		if (apiData?.length) {
 			let formattedData;
