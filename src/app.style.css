@@ -54,24 +54,24 @@ th:nth-child(1) {
 }
 
 .pagination {
-	display: inline-block;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	padding-left: 0;
 	border-radius: 4px;
 }
 
-.pagination > li {
-	display: inline;
+.pagination > div {
+	display: flex;
 }
 
-.pagination > li:first-child > a,
-.pagination > li:first-child > span {
+.pagination > div:first-child > button:first-child {
 	margin-left: 0;
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
 }
 
-.pagination > li > a,
-.pagination > li > span {
+.pagination > div > button {
 	position: relative;
 	float: left;
 	padding: 6px 12px;
@@ -83,19 +83,11 @@ th:nth-child(1) {
 	border: 1px solid #ddd;
 }
 
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	border: 0;
+.pagination > div > h5 {
+	font-weight: 500;
 }
 
-.pagination > li:last-child > a,
-.pagination > li:last-child > span {
+.pagination > div:last-child > button:last-child {
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 }

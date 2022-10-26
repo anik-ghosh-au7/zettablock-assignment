@@ -2,8 +2,7 @@ export const formatDateStr = (str) => {
 	return str.split('T')[0].split('-').reverse().join('/');
 };
 
-export const getMaxPages = (pagination) => {
-	const { limit, total } = pagination;
+export const getMaxPages = (limit, total) => {
 	if (total > 1) {
 		return total % limit === 0
 			? total / limit

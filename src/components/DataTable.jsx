@@ -5,17 +5,16 @@ import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
 import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
 import { ReactComponent as CopySvg } from '../icons/copy.svg';
-import { formatDateStr, copyTextToClipboard } from '../utils';
+import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 
-const DataTable = ({ apiData = [] }) => {
-	console.log('apiData ==>> ', apiData);
+const DataTable = ({ apiData }) => {
 	const [apiList, setApiList] = useState([]);
+	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
 		limit: 5,
 		page: 1,
 		offset: 0,
-		total: apiData.length,
-		maxPages: 1,
+		total: apiData?.length || 0,
 	});
 	const [selectedData, setSelectedData] = useState({
 		data: null,
@@ -24,13 +23,31 @@ const DataTable = ({ apiData = [] }) => {
 	const actionHandler = async (currentAction, currentData) => {
 		setSelectedData({ action: currentAction, data: currentData });
 	};
+
 	useEffect(() => {
-		setApiList(
-			apiData.slice(
-				paginationData.offset,
-				paginationData.offset + paginationData.limit
-			)
-		);
+		if (apiData?.length) {
+			setPaginationData({
+				limit: 5,
+				page: 1,
+				offset: 0,
+				total: apiData.length,
+			});
+		}
+	}, [apiData]);
+
+	useEffect(() => {
+		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
+	}, [paginationData]);
+
+	useEffect(() => {
+		if (apiData?.length) {
+			setApiList(
+				apiData.slice(
+					paginationData.offset,
+					paginationData.offset + paginationData.limit
+				)
+			);
+		}
 	}, [apiData, paginationData]);
 	return (
 		<div className="container">
@@ -123,22 +140,21 @@ const DataTable = ({ apiData = [] }) => {
 				</tbody>
 			</table>
 			<div className="pagination-container">
-				<nav>
-					<ul className="pagination">
-						<li data-page="prev">
-							<span>{'<<'}</span>
-						</li>
-						<li data-page="prev">
-							<span>{'<'}</span>
-						</li>
-						<li data-page="next" id="prev">
-							<span>{'>'}</span>
-						</li>
-						<li data-page="next" id="prev">
-							<span>{'>>'}</span>
-						</li>
-					</ul>
-				</nav>
+				<div className="pagination">
+					<div>
+						<button>{'<<'}</button>
+						<button>{'<'}</button>
+					</div>
+					<div>
+						<h5>
+							Page {paginationData.page} of {maxPages}
+						</h5>
+					</div>
+					<div>
+						<button>{'>'}</button>
+						<button>{'>>'}</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
