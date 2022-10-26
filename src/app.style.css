@@ -63,6 +63,7 @@ th:nth-child(1) {
 
 .pagination > div {
 	display: flex;
+	align-items: center;
 }
 
 .pagination > div:first-child > button:first-child {
@@ -76,7 +77,7 @@ th:nth-child(1) {
 	float: left;
 	padding: 6px 12px;
 	margin-left: -1px;
-	line-height: 1.42857143;
+	line-height: 1.5;
 	color: #337ab7;
 	text-decoration: none;
 	background-color: #fff;
@@ -86,6 +87,16 @@ th:nth-child(1) {
 
 .pagination > div > h5 {
 	font-weight: 400;
+}
+
+.pagination > div > [data-input='number'] {
+	height: 30px;
+	width: 75px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	margin-left: 10px;
+	border-radius: 4px;
+	padding-left: 10px;
 }
 
 .pagination > div:last-child > button:last-child {

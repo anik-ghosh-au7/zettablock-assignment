@@ -54,6 +54,19 @@ const DataTable = ({ apiData }) => {
 				});
 				break;
 			case paginationActions.GOTO:
+				let gotoPageNumber;
+				if (payload.pageNumber > maxPages) {
+					gotoPageNumber = maxPages;
+				} else if (payload.pageNumber <= 0) {
+					gotoPageNumber = 1;
+				} else {
+					gotoPageNumber = payload.pageNumber;
+				}
+				setPaginationData({
+					...paginationData,
+					page: gotoPageNumber,
+					offset: (gotoPageNumber - 1) * paginationData.limit,
+				});
 				break;
 			case paginationActions.SHOW:
 				break;
@@ -188,6 +201,20 @@ const DataTable = ({ apiData }) => {
 						<h5>
 							Page <b>{paginationData.page}</b> of <b>{maxPages}</b>
 						</h5>
+					</div>
+					<div>
+						<h5>Go to page:</h5>
+						<input
+							data-input="number"
+							type="number"
+							value={paginationData.page}
+							max={maxPages}
+							onChange={(e) =>
+								paginationHandler(paginationActions.GOTO, {
+									pageNumber: e.target.value,
+								})
+							}
+						></input>
 					</div>
 					<div>
 						<button onClick={() => paginationHandler(paginationActions.NEXT)}>
