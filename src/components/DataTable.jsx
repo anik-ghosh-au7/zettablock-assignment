@@ -1,5 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from 'react';
-import { actionTypes, paginationActions, sortOptions } from '../constants';
+import {
+	actionTypes,
+	paginationActions,
+	sortOptions,
+	searchOptions,
+} from '../constants';
 import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
@@ -8,12 +14,18 @@ import { ReactComponent as CopySvg } from '../icons/copy.svg';
 import { ReactComponent as SortSvg } from '../icons/sort.svg';
 import { ReactComponent as SortAscSvg } from '../icons/sortasc.svg';
 import { ReactComponent as SortDescSvg } from '../icons/sortdesc.svg';
+import { ReactComponent as SearchSvg } from '../icons/search.svg';
+import { ReactComponent as ClearSvg } from '../icons/clear.svg';
 import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 
-const DataTable = ({ apiData }) => {
-	// console.log('apiData ==>> ', apiData);
+const DataTable = ({ apiInputData }) => {
+	const [apiData, setApiData] = useState([]);
 	const [apiList, setApiList] = useState([]);
-	const [sorting, setSorting] = useState(sortOptions.NONE);
+	const [sortData, setSortData] = useState(sortOptions.NONE);
+	const [searchData, setSearchData] = useState({
+		searchText: '',
+		searchAction: null,
+	});
 	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
 		limit: 5,
@@ -26,27 +38,59 @@ const DataTable = ({ apiData }) => {
 		action: null,
 	});
 	const renderSortButton = () => {
-		switch (sorting) {
+		switch (sortData) {
 			case sortOptions.ASC:
 				return (
-					<button onClick={() => setSorting(sortOptions.DESC)}>
+					<button onClick={() => setSortData(sortOptions.DESC)}>
 						<SortAscSvg />
 					</button>
 				);
 			case sortOptions.DESC:
 				return (
-					<button onClick={() => setSorting(sortOptions.NONE)}>
+					<button onClick={() => setSortData(sortOptions.NONE)}>
 						<SortDescSvg />
 					</button>
 				);
 			default:
 				return (
-					<button onClick={() => setSorting(sortOptions.ASC)}>
+					<button onClick={() => setSortData(sortOptions.ASC)}>
 						<SortSvg />
 					</button>
 				);
 		}
 	};
+	const renderSearchButton = () => {
+		switch (searchData.searchAction) {
+			case searchOptions.SEARCH:
+				return (
+					<button
+						onClick={() => {
+							setSearchData({
+								searchText: '',
+								searchAction: searchOptions.CLEAR,
+							});
+						}}
+					>
+						<ClearSvg />
+					</button>
+				);
+			default:
+				return (
+					<button
+						onClick={() => {
+							searchData.searchText &&
+								setSearchData({
+									...searchData,
+									searchAction: searchOptions.SEARCH,
+								});
+						}}
+					>
+						<SearchSvg />
+					</button>
+				);
+		}
+	};
+
 	const actionHandler = async (currentAction, currentData) => {
 		setSelectedData({ action: currentAction, data: currentData });
 	};
@@ -107,55 +151,99 @@ const DataTable = ({ apiData }) => {
 				break;
 		}
 	};
+	const searchInputHandler = (e) => {
+		setSearchData({
+			searchAction: searchOptions.CLEAR,
+			searchText: e.target.value.trim(),
+		});
+	};
 	useEffect(() => {
-		if (apiData?.length) {
-			setPaginationData({
-				limit: 5,
-				page: 1,
-				offset: 0,
-				total: apiData.length,
-			});
+		if (apiInputData?.length) {
+			setApiData(apiInputData);
 		}
+	}, [apiInputData]);
+	useEffect(() => {
+		setPaginationData({
+			...paginationData,
+			total: apiData.length,
+		});
 	}, [apiData]);
 	useEffect(() => {
+		if (apiInputData?.length) {
+			setApiData(apiInputData);
+		}
+	}, [apiInputData]);
+	useEffect(() => {
 		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
-	}, [paginationData]);
+		if (apiData?.length) {
+			setApiList(
+				apiData.slice(
+					paginationData.offset,
+					paginationData.offset + paginationData.limit
+				)
+			);
+		}
+	}, [apiData, paginationData]);
 	useEffect(() => {
 		if (apiData?.length) {
-			let sortedApiData = [...apiData];
-			switch (sorting) {
+			let formattedData;
+			let apiDataCopy = [...apiData];
+			switch (sortData) {
 				case sortOptions.ASC:
-					sortedApiData.sort((a, b) => (a.name > b.name ? 1 : -1));
-					setApiList(
-						sortedApiData.slice(
-							paginationData.offset,
-							paginationData.offset + paginationData.limit
-						)
+					formattedData = apiDataCopy.sort((a, b) =>
+						a.name > b.name ? 1 : -1
 					);
 					break;
 				case sortOptions.DESC:
-					sortedApiData.sort((a, b) => (a.name > b.name ? -1 : 1));
-					setApiList(
-						sortedApiData.slice(
-							paginationData.offset,
-							paginationData.offset + paginationData.limit
+					formattedData = apiDataCopy.sort((a, b) =>
+						a.name > b.name ? -1 : 1
+					);
+					break;
+				default:
+					formattedData = [...apiInputData];
+					break;
+			}
+			if (searchData.searchAction === searchOptions.SEARCH) {
+				formattedData = formattedData.filter((data) =>
+					(data.name + data.description)
+						.toLowerCase()
+						.includes(searchData.searchText)
+				);
+			}
+			setApiData(formattedData);
+		}
+	}, [sortData, searchData]);
+	useEffect(() => {
+		if (apiInputData?.length) {
+			let apiDataCopy = [...apiInputData];
+			switch (searchData.searchAction) {
+				case searchOptions.SEARCH:
+					setApiData(
+						apiDataCopy.filter((data) =>
+							(data.name + data.description)
+								.toLowerCase()
+								.includes(searchData.searchText)
 						)
 					);
 					break;
 				default:
-					setApiList(
-						apiData.slice(
-							paginationData.offset,
-							paginationData.offset + paginationData.limit
-						)
-					);
+					setApiData([...apiInputData]);
 					break;
 			}
 		}
-	}, [apiData, paginationData, sorting]);
+	}, [apiInputData, searchData]);
 	return (
 		<div className="container">
-			<h2>APIs: </h2>
+			<div>
+				<h2>APIs: </h2>
+				<input
+					type="text"
+					value={searchData.searchText}
+					onChange={searchInputHandler}
+					placeholder="Search for keywords"
+				></input>
+				{renderSearchButton()}
+			</div>
 			<table>
 				<thead>
 					<tr>

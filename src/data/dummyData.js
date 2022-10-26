@@ -1,7 +1,7 @@
 export const dummyData = [
 	{
 		createdAt: '2022-01-22T01:04:51.104Z',
-		name: 'ball_explicit.mjs',
+		name: 'best_explicit.mjs',
 		updatedAt: '2022-09-25T16:21:45.759Z',
 		description: 'description 15322',
 		type: 'smallint',

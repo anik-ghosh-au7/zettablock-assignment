@@ -22,7 +22,7 @@ const App = () => {
 	useEffect(() => {
 		fetchApiData();
 	}, []);
-	return <DataTable apiData={apiData} />;
+	return <DataTable apiInputData={apiData} />;
 };
 
 export default App;

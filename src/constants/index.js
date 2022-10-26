@@ -19,3 +19,8 @@ export const sortOptions = {
 	ASC: 'ASC',
 	DESC: 'DESC',
 };
+
+export const searchOptions = {
+	SEARCH: 'SEARCH',
+	CLEAR: 'CLEAR',
+};
