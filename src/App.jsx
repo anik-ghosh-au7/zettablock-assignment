@@ -36,10 +36,17 @@ const App = () => {
 		fetchApiData();
 	};
 	const editApiData = async (dataId, description) => {
+		const dataIndex = apiData.findIndex((data) => data.id === dataId);
+		const apiDataCopy = [...apiData];
+		const apiDataItem = { ...apiData[dataIndex] };
+		apiDataItem.description = description;
+		apiDataCopy[dataIndex] = apiDataItem;
+		setApiData(apiDataCopy);
 		await fetch(
 			`https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis/${dataId}`,
 			{
 				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ description }),
 			}
 		);

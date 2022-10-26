@@ -16,6 +16,7 @@ import { ReactComponent as SortAscSvg } from '../icons/sortasc.svg';
 import { ReactComponent as SortDescSvg } from '../icons/sortdesc.svg';
 import { ReactComponent as SearchSvg } from '../icons/search.svg';
 import { ReactComponent as ClearSvg } from '../icons/clear.svg';
+import { ReactComponent as SaveSvg } from '../icons/save.svg';
 import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 
 const DataTable = ({
@@ -93,13 +94,12 @@ const DataTable = ({
 		}
 	};
 	const actionHandler = async (currentAction, currentData) => {
-		switch (currentAction) {
-			case actionTypes.DELETE:
-				await deleteApiData(currentData.id);
-				break;
-			default:
-				setSelectedData({ action: currentAction, data: currentData });
-				break;
+		setSelectedData({ action: currentAction, data: currentData });
+		if (currentAction === actionTypes.DELETE) {
+			await deleteApiData(currentData.id);
+		}
+		if (currentAction === actionTypes.SAVE) {
+			await editApiData(currentData.id, selectedData.data.description);
 		}
 	};
 	const paginationHandler = (action, payload = undefined) => {
@@ -163,6 +163,15 @@ const DataTable = ({
 		setSearchData({
 			searchAction: searchOptions.CLEAR,
 			searchText: e.target.value.trim(),
+		});
+	};
+	const descriptionInputHandler = (e) => {
+		setSelectedData({
+			...selectedData,
+			data: {
+				...selectedData.data,
+				description: e.target.value,
+			},
 		});
 	};
 	useEffect(() => {
@@ -248,11 +257,20 @@ const DataTable = ({
 											>
 												<DeleteSvg />
 											</button>
-											<button
-												onClick={() => actionHandler(actionTypes.EDIT, data)}
-											>
-												<EditSvg />
-											</button>
+											{selectedData.data?.id === data.id &&
+											selectedData.action === actionTypes.EDIT ? (
+												<button
+													onClick={() => actionHandler(actionTypes.SAVE, data)}
+												>
+													<SaveSvg />
+												</button>
+											) : (
+												<button
+													onClick={() => actionHandler(actionTypes.EDIT, data)}
+												>
+													<EditSvg />
+												</button>
+											)}
 											{selectedData.action === actionTypes.MAXIMIZE &&
 											selectedData.data?.id === data.id ? (
 												<button
@@ -281,7 +299,17 @@ const DataTable = ({
 									<td data-column="id">{data.id}</td>
 									<td data-column="name">{data.name}</td>
 									<td data-column="type">{data.type}</td>
-									<td data-column="description">{data.description}</td>
+									<td data-column="description">
+										{selectedData.data?.id === data.id &&
+										selectedData.action === actionTypes.EDIT ? (
+											<input
+												value={selectedData.data.description}
+												onChange={descriptionInputHandler}
+											></input>
+										) : (
+											data.description
+										)}
+									</td>
 									<td data-column="createdAt">
 										{formatDateStr(data.createdAt)}
 									</td>

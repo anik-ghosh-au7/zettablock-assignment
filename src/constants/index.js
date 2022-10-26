@@ -3,6 +3,7 @@ export const actionTypes = {
 	DELETE: 'DELETE',
 	MAXIMIZE: 'MAXIMIZE',
 	MINIMIZE: 'MINIMIZE',
+	SAVE: 'SAVE',
 };
 
 export const paginationActions = {
