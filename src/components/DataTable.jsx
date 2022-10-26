@@ -240,6 +240,20 @@ const DataTable = ({ apiInputData }) => {
 					type="text"
 					value={searchData.searchText}
 					onChange={searchInputHandler}
+					onKeyDown={() => {
+						searchData.searchText &&
+							setSearchData({
+								...searchData,
+								searchAction: searchOptions.SEARCH,
+							});
+					}}
+					onKeyPress={() => {
+						searchData.searchText &&
+							setSearchData({
+								...searchData,
+								searchAction: searchOptions.SEARCH,
+							});
+					}}
 					placeholder="Search for keywords"
 				></input>
 				{renderSearchButton()}
