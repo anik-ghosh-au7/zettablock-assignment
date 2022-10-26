@@ -67,7 +67,7 @@ const DataTable = ({ apiInputData }) => {
 						onClick={() => {
 							setSearchData({
 								searchText: '',
-								searchAction: searchOptions.CLEAR,
+								searchAction: null,
 							});
 						}}
 					>
@@ -157,11 +157,6 @@ const DataTable = ({ apiInputData }) => {
 		});
 	};
 	useEffect(() => {
-		if (apiInputData?.length) {
-			setApiData(apiInputData);
-		}
-	}, [apiInputData]);
-	useEffect(() => {
 		setPaginationData({
 			...paginationData,
 			total: apiData.length,
@@ -179,7 +174,7 @@ const DataTable = ({ apiInputData }) => {
 				paginationData.offset,
 				paginationData.offset + paginationData.limit
 			);
-			searchData.searchAction === searchOptions.SEARCH && searchData.searchText
+			searchData.searchAction === searchOptions.SEARCH
 				? setApiList(
 						updatedData.filter((data) =>
 							(data.name + data.description)
@@ -189,7 +184,7 @@ const DataTable = ({ apiInputData }) => {
 				  )
 				: setApiList(updatedData);
 		}
-	}, [apiData, paginationData, searchData]);
+	}, [apiData, paginationData]);
 	useEffect(() => {
 		if (apiData?.length) {
 			let formattedData;
@@ -231,6 +226,8 @@ const DataTable = ({ apiInputData }) => {
 								.includes(searchData.searchText)
 						)
 					);
+					break;
+				case searchOptions.CLEAR:
 					break;
 				default:
 					setApiData([...apiInputData]);
