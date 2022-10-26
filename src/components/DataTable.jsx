@@ -14,7 +14,7 @@ const DataTable = ({ apiData = [] }) => {
 		limit: 5,
 		page: 1,
 		offset: 0,
-		total: 0,
+		total: apiData.length,
 		maxPages: 1,
 	});
 	const [selectedData, setSelectedData] = useState({
@@ -126,16 +126,16 @@ const DataTable = ({ apiData = [] }) => {
 				<nav>
 					<ul className="pagination">
 						<li data-page="prev">
-							<span>
-								{'<'}
-								<span className="sr-only">(current)</span>
-							</span>
+							<span>{'<<'}</span>
+						</li>
+						<li data-page="prev">
+							<span>{'<'}</span>
 						</li>
 						<li data-page="next" id="prev">
-							<span>
-								{'>'}
-								<span className="sr-only">(current)</span>
-							</span>
+							<span>{'>'}</span>
+						</li>
+						<li data-page="next" id="prev">
+							<span>{'>>'}</span>
 						</li>
 					</ul>
 				</nav>
