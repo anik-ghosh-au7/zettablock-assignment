@@ -69,6 +69,12 @@ const DataTable = ({ apiData }) => {
 				});
 				break;
 			case paginationActions.SHOW:
+				setPaginationData({
+					...paginationData,
+					page: 1,
+					offset: 0,
+					limit: payload.limit,
+				});
 				break;
 			default:
 				break;
@@ -205,7 +211,6 @@ const DataTable = ({ apiData }) => {
 					<div>
 						<h5>Go to page:</h5>
 						<input
-							data-input="number"
 							type="number"
 							value={paginationData.page}
 							max={maxPages}
@@ -215,6 +220,21 @@ const DataTable = ({ apiData }) => {
 								})
 							}
 						></input>
+					</div>
+					<div>
+						<select
+							value={paginationData.limit}
+							onChange={(e) =>
+								paginationHandler(paginationActions.SHOW, {
+									limit: e.target.value,
+								})
+							}
+						>
+							<option value={5}>Show 5</option>
+							<option value={10}>Show 10</option>
+							<option value={15}>Show 15</option>
+							<option value={20}>Show 20</option>
+						</select>
 					</div>
 					<div>
 						<button onClick={() => paginationHandler(paginationActions.NEXT)}>

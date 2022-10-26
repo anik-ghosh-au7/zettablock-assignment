@@ -89,14 +89,23 @@ th:nth-child(1) {
 	font-weight: 400;
 }
 
-.pagination > div > [data-input='number'] {
+.pagination > div > input {
 	height: 30px;
 	width: 75px;
 	background-color: #fff;
 	border: 1px solid #ddd;
 	margin-left: 10px;
 	border-radius: 4px;
-	padding-left: 10px;
+	padding-left: 5px;
+}
+
+.pagination > div > select {
+	height: 35px;
+	width: 100px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding-left: 5px;
 }
 
 .pagination > div:last-child > button:last-child {
