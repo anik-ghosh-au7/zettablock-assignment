@@ -30,7 +30,7 @@ const DataTable = ({
 		limit: 5,
 		page: 1,
 		offset: 0,
-		total: apiData?.length || 0,
+		total: 0,
 	});
 	const [selectedData, setSelectedData] = useState({
 		data: null,

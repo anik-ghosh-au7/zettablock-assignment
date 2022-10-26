@@ -5,7 +5,7 @@ import { searchOptions, sortOptions } from './constants';
 import { dummyData } from './data/dummyData';
 
 const App = () => {
-	const [apiRawData, setRawApiData] = useState([]);
+	const [apiRawData, setApiRawData] = useState([]);
 	const [apiData, setApiData] = useState();
 	const [sortData, setSortData] = useState(sortOptions.NONE);
 	const [searchData, setSearchData] = useState({
@@ -19,12 +19,12 @@ const App = () => {
 		// if (response.status === 200) {
 		// 	const responseData = await response.json();
 		// 	if (responseData?.length) {
-		// 		setRawApiData(responseData);
+		// 		setApiRawData(responseData);
 		// 	}
 		// }
 
 		//for testing
-		setRawApiData(dummyData);
+		setApiRawData(dummyData);
 	};
 	useEffect(() => {
 		fetchApiData();
