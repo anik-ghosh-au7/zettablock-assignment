@@ -168,7 +168,7 @@ th:nth-child(1) {
 	cursor: pointer;
 }
 .json__content > pre {
-	max-height: 250px;
+	max-height: 200px;
 	overflow: scroll;
 	text-align: left;
 	white-space: pre;
