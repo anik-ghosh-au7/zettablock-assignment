@@ -13,3 +13,8 @@ export const paginationActions = {
 	GOTO: 'GOTO',
 	SHOW: 'SHOW',
 };
+
+export const sortOptions = {
+	ASC: 'ASC',
+	DESC: 'DESC',
+};

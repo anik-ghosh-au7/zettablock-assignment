@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { actionTypes, paginationActions } from '../constants';
+import { actionTypes, paginationActions, sortOptions } from '../constants';
 import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
@@ -8,7 +8,9 @@ import { ReactComponent as CopySvg } from '../icons/copy.svg';
 import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 
 const DataTable = ({ apiData }) => {
+	console.log('apiData ==>> ', apiData);
 	const [apiList, setApiList] = useState([]);
+	const [sorting, setSorting] = useState();
 	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
 		limit: 5,
@@ -95,6 +97,16 @@ const DataTable = ({ apiData }) => {
 	}, [paginationData]);
 	useEffect(() => {
 		if (apiData?.length) {
+			switch (sorting) {
+				case sortOptions.ASC:
+					apiData.sort((a, b) => (a.name > b.name ? -1 : 1));
+					break;
+				case sortOptions.DESC:
+					apiData.sort((a, b) => (a.name > b.name ? 1 : -1));
+					break;
+				default:
+					break;
+			}
 			setApiList(
 				apiData.slice(
 					paginationData.offset,
@@ -102,7 +114,7 @@ const DataTable = ({ apiData }) => {
 				)
 			);
 		}
-	}, [apiData, paginationData]);
+	}, [apiData, paginationData, sorting]);
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
