@@ -24,6 +24,7 @@ const DataTable = ({
 	setSortData,
 	searchData,
 	setSearchData,
+	deleteApiData,
 }) => {
 	const [apiList, setApiList] = useState([]);
 	const [maxPages, setMaxPages] = useState(1);
@@ -91,7 +92,14 @@ const DataTable = ({
 		}
 	};
 	const actionHandler = async (currentAction, currentData) => {
-		setSelectedData({ action: currentAction, data: currentData });
+		switch (currentAction) {
+			case actionTypes.DELETE:
+				await deleteApiData(currentData.id);
+				break;
+			default:
+				setSelectedData({ action: currentAction, data: currentData });
+				break;
+		}
 	};
 	const paginationHandler = (action, payload = undefined) => {
 		switch (action) {

@@ -13,18 +13,27 @@ const App = () => {
 		searchAction: null,
 	});
 	const fetchApiData = async () => {
-		// const response = await fetch(
-		// 	'https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis'
-		// );
-		// if (response.status === 200) {
-		// 	const responseData = await response.json();
-		// 	if (responseData?.length) {
-		// 		setApiRawData(responseData);
-		// 	}
-		// }
+		const response = await fetch(
+			'https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis'
+		);
+		if (response.status === 200) {
+			const responseData = await response.json();
+			if (responseData?.length) {
+				setApiRawData(responseData);
+			}
+		}
 
 		//for testing
-		setApiRawData(dummyData);
+		// setApiRawData(dummyData);
+	};
+	const deleteApiData = async (dataId) => {
+		const response = await fetch(
+			`https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis/${dataId}`,
+			{
+				method: 'DELETE',
+			}
+		);
+		fetchApiData();
 	};
 	useEffect(() => {
 		fetchApiData();
@@ -59,6 +68,7 @@ const App = () => {
 			setSortData={setSortData}
 			searchData={searchData}
 			setSearchData={setSearchData}
+			deleteApiData={deleteApiData}
 		/>
 	);
 };
