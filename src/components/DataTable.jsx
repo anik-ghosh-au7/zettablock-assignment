@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import {
 	actionTypes,
 	paginationActions,
@@ -28,6 +28,7 @@ const DataTable = ({
 	deleteApiData,
 	editApiData,
 }) => {
+	const descriptionInputRef = useRef(null);
 	const [apiList, setApiList] = useState([]);
 	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
@@ -175,6 +176,11 @@ const DataTable = ({
 		});
 	};
 	useEffect(() => {
+		if (selectedData.action === actionTypes.EDIT && descriptionInputRef) {
+			descriptionInputRef.current.focus();
+		}
+	}, [selectedData]);
+	useEffect(() => {
 		setPaginationData({
 			...paginationData,
 			total: apiData.length,
@@ -298,6 +304,7 @@ const DataTable = ({
 										{selectedData.data?.id === data.id &&
 										selectedData.action === actionTypes.EDIT ? (
 											<input
+												ref={descriptionInputRef}
 												value={selectedData.data.description}
 												onChange={descriptionInputHandler}
 												onKeyPress={(e) => {
