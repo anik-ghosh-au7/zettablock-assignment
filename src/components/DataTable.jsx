@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { actionTypes } from '../constants';
 import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
@@ -9,7 +9,8 @@ import { formatDateStr, copyTextToClipboard } from '../utils';
 
 const DataTable = ({ apiData = [] }) => {
 	console.log('apiData ==>> ', apiData);
-	const [paginationProps, setPaginationProps] = useState({
+	const [apiList, setApiList] = useState([]);
+	const [paginationData, setPaginationData] = useState({
 		limit: 5,
 		page: 1,
 		offset: 0,
@@ -23,6 +24,14 @@ const DataTable = ({ apiData = [] }) => {
 	const actionHandler = async (currentAction, currentData) => {
 		setSelectedData({ action: currentAction, data: currentData });
 	};
+	useEffect(() => {
+		setApiList(
+			apiData.slice(
+				paginationData.offset,
+				paginationData.offset + paginationData.limit
+			)
+		);
+	}, [apiData, paginationData]);
 	return (
 		<div className="container">
 			<h2>APIs: </h2>
@@ -39,8 +48,7 @@ const DataTable = ({ apiData = [] }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{/* for testing */}
-					{apiData.slice(0, 6).map((data) => {
+					{apiList.map((data) => {
 						const strData = JSON.stringify(data, null, '\t').replace(
 							/\\n/g,
 							''
