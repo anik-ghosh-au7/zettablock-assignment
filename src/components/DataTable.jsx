@@ -214,11 +214,14 @@ const DataTable = ({ apiData }) => {
 							type="number"
 							value={paginationData.page}
 							max={maxPages}
-							onChange={(e) =>
-								paginationHandler(paginationActions.GOTO, {
-									pageNumber: e.target.value,
-								})
-							}
+							onChange={(e) => {
+								if (e?.target?.value && !isNaN(e.target.value)) {
+									let currentValue = parseInt(e.target.value);
+									paginationHandler(paginationActions.GOTO, {
+										pageNumber: currentValue > 0 ? currentValue : 1,
+									});
+								}
+							}}
 						></input>
 					</div>
 					<div>
@@ -226,7 +229,7 @@ const DataTable = ({ apiData }) => {
 							value={paginationData.limit}
 							onChange={(e) =>
 								paginationHandler(paginationActions.SHOW, {
-									limit: e.target.value,
+									limit: parseInt(e.target.value),
 								})
 							}
 						>
