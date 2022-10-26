@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from 'react';
 import {
 	actionTypes,
@@ -18,14 +17,14 @@ import { ReactComponent as SearchSvg } from '../icons/search.svg';
 import { ReactComponent as ClearSvg } from '../icons/clear.svg';
 import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 
-const DataTable = ({ apiInputData }) => {
-	const [apiData, setApiData] = useState([]);
+const DataTable = ({
+	apiData = [],
+	sortData,
+	setSortData,
+	searchData,
+	setSearchData,
+}) => {
 	const [apiList, setApiList] = useState([]);
-	const [sortData, setSortData] = useState(sortOptions.NONE);
-	const [searchData, setSearchData] = useState({
-		searchText: '',
-		searchAction: null,
-	});
 	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
 		limit: 5,
@@ -161,12 +160,8 @@ const DataTable = ({ apiInputData }) => {
 			...paginationData,
 			total: apiData.length,
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [apiData]);
-	useEffect(() => {
-		if (apiInputData?.length) {
-			setApiData(apiInputData);
-		}
-	}, [apiInputData]);
 	useEffect(() => {
 		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
 		if (apiData?.length) {
@@ -174,67 +169,9 @@ const DataTable = ({ apiInputData }) => {
 				paginationData.offset,
 				paginationData.offset + paginationData.limit
 			);
-			searchData.searchAction === searchOptions.SEARCH
-				? setApiList(
-						updatedData.filter((data) =>
-							(data.name + data.description)
-								.toLowerCase()
-								.includes(searchData.searchText)
-						)
-				  )
-				: setApiList(updatedData);
+			setApiList(updatedData);
 		}
 	}, [apiData, paginationData]);
-	useEffect(() => {
-		if (apiData?.length) {
-			let formattedData;
-			let apiDataCopy = [...apiData];
-			switch (sortData) {
-				case sortOptions.ASC:
-					formattedData = apiDataCopy.sort((a, b) =>
-						a.name > b.name ? 1 : -1
-					);
-					break;
-				case sortOptions.DESC:
-					formattedData = apiDataCopy.sort((a, b) =>
-						a.name > b.name ? -1 : 1
-					);
-					break;
-				default:
-					formattedData = [...apiInputData];
-					break;
-			}
-			if (searchData.searchAction === searchOptions.SEARCH) {
-				formattedData = formattedData.filter((data) =>
-					(data.name + data.description)
-						.toLowerCase()
-						.includes(searchData.searchText)
-				);
-			}
-			setApiData(formattedData);
-		}
-	}, [sortData, searchData]);
-	useEffect(() => {
-		if (apiInputData?.length) {
-			let apiDataCopy = [...apiInputData];
-			switch (searchData.searchAction) {
-				case searchOptions.SEARCH:
-					setApiData(
-						apiDataCopy.filter((data) =>
-							(data.name + data.description)
-								.toLowerCase()
-								.includes(searchData.searchText)
-						)
-					);
-					break;
-				case searchOptions.CLEAR:
-					break;
-				default:
-					setApiData([...apiInputData]);
-					break;
-			}
-		}
-	}, [apiInputData, searchData]);
 	return (
 		<div className="container">
 			<div>
