@@ -196,10 +196,16 @@ const DataTable = ({ apiData }) => {
 			<div className="pagination-container">
 				<div className="pagination">
 					<div>
-						<button onClick={() => paginationHandler(paginationActions.FIRST)}>
+						<button
+							disabled={paginationData.page <= 1}
+							onClick={() => paginationHandler(paginationActions.FIRST)}
+						>
 							{'<<'}
 						</button>
-						<button onClick={() => paginationHandler(paginationActions.PREV)}>
+						<button
+							disabled={paginationData.page <= 1}
+							onClick={() => paginationHandler(paginationActions.PREV)}
+						>
 							{'<'}
 						</button>
 					</div>
@@ -240,10 +246,16 @@ const DataTable = ({ apiData }) => {
 						</select>
 					</div>
 					<div>
-						<button onClick={() => paginationHandler(paginationActions.NEXT)}>
+						<button
+							disabled={paginationData.page >= maxPages}
+							onClick={() => paginationHandler(paginationActions.NEXT)}
+						>
 							{'>'}
 						</button>
-						<button onClick={() => paginationHandler(paginationActions.LAST)}>
+						<button
+							disabled={paginationData.page >= maxPages}
+							onClick={() => paginationHandler(paginationActions.LAST)}
+						>
 							{'>>'}
 						</button>
 					</div>
