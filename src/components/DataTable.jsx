@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from 'react';
 import {
 	actionTypes,
@@ -160,8 +161,19 @@ const DataTable = ({
 			...paginationData,
 			total: apiData.length,
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [apiData]);
+	useEffect(() => {
+		if (
+			searchData.searchAction === searchOptions.SEARCH &&
+			searchData.searchText
+		) {
+			setPaginationData({
+				...paginationData,
+				page: 1,
+				offset: 0,
+			});
+		}
+	}, [searchData.searchAction]);
 	useEffect(() => {
 		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
 		const updatedData = apiData.slice(
