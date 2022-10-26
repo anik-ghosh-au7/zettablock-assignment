@@ -27,7 +27,7 @@ const App = () => {
 		// setApiRawData(dummyData);
 	};
 	const deleteApiData = async (dataId) => {
-		const response = await fetch(
+		await fetch(
 			`https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis/${dataId}`,
 			{
 				method: 'DELETE',
