@@ -81,10 +81,11 @@ th:nth-child(1) {
 	text-decoration: none;
 	background-color: #fff;
 	border: 1px solid #ddd;
+	cursor: pointer;
 }
 
 .pagination > div > h5 {
-	font-weight: 500;
+	font-weight: 400;
 }
 
 .pagination > div:last-child > button:last-child {

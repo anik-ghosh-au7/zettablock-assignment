@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { actionTypes } from '../constants';
+import { actionTypes, paginationActions } from '../constants';
 import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
@@ -23,7 +23,44 @@ const DataTable = ({ apiData }) => {
 	const actionHandler = async (currentAction, currentData) => {
 		setSelectedData({ action: currentAction, data: currentData });
 	};
-
+	const paginationHandler = (action, payload = undefined) => {
+		switch (action) {
+			case paginationActions.PREV:
+				setPaginationData({
+					...paginationData,
+					page: paginationData.page - 1,
+					offset: paginationData.offset - paginationData.limit,
+				});
+				break;
+			case paginationActions.NEXT:
+				setPaginationData({
+					...paginationData,
+					page: paginationData.page + 1,
+					offset: paginationData.offset + paginationData.limit,
+				});
+				break;
+			case paginationActions.FIRST:
+				setPaginationData({
+					...paginationData,
+					page: 1,
+					offset: 0,
+				});
+				break;
+			case paginationActions.LAST:
+				setPaginationData({
+					...paginationData,
+					page: maxPages,
+					offset: (maxPages - 1) * paginationData.limit,
+				});
+				break;
+			case paginationActions.GOTO:
+				break;
+			case paginationActions.SHOW:
+				break;
+			default:
+				break;
+		}
+	};
 	useEffect(() => {
 		if (apiData?.length) {
 			setPaginationData({
@@ -34,11 +71,9 @@ const DataTable = ({ apiData }) => {
 			});
 		}
 	}, [apiData]);
-
 	useEffect(() => {
 		setMaxPages(getMaxPages(paginationData.limit, paginationData.total));
 	}, [paginationData]);
-
 	useEffect(() => {
 		if (apiData?.length) {
 			setApiList(
@@ -142,17 +177,25 @@ const DataTable = ({ apiData }) => {
 			<div className="pagination-container">
 				<div className="pagination">
 					<div>
-						<button>{'<<'}</button>
-						<button>{'<'}</button>
+						<button onClick={() => paginationHandler(paginationActions.FIRST)}>
+							{'<<'}
+						</button>
+						<button onClick={() => paginationHandler(paginationActions.PREV)}>
+							{'<'}
+						</button>
 					</div>
 					<div>
 						<h5>
-							Page {paginationData.page} of {maxPages}
+							Page <b>{paginationData.page}</b> of <b>{maxPages}</b>
 						</h5>
 					</div>
 					<div>
-						<button>{'>'}</button>
-						<button>{'>>'}</button>
+						<button onClick={() => paginationHandler(paginationActions.NEXT)}>
+							{'>'}
+						</button>
+						<button onClick={() => paginationHandler(paginationActions.LAST)}>
+							{'>>'}
+						</button>
 					</div>
 				</div>
 			</div>
