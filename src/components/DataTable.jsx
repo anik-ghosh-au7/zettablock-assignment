@@ -90,7 +90,6 @@ const DataTable = ({ apiInputData }) => {
 				);
 		}
 	};
-
 	const actionHandler = async (currentAction, currentData) => {
 		setSelectedData({ action: currentAction, data: currentData });
 	};
