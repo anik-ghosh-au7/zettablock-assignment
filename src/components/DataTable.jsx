@@ -5,12 +5,15 @@ import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
 import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
 import { ReactComponent as CopySvg } from '../icons/copy.svg';
+import { ReactComponent as SortSvg } from '../icons/sort.svg';
+import { ReactComponent as SortAscSvg } from '../icons/sortasc.svg';
+import { ReactComponent as SortDescSvg } from '../icons/sortdesc.svg';
 import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 
 const DataTable = ({ apiData }) => {
-	console.log('apiData ==>> ', apiData);
+	// console.log('apiData ==>> ', apiData);
 	const [apiList, setApiList] = useState([]);
-	const [sorting, setSorting] = useState();
+	const [sorting, setSorting] = useState(sortOptions.NONE);
 	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
 		limit: 5,
@@ -22,6 +25,28 @@ const DataTable = ({ apiData }) => {
 		data: null,
 		action: null,
 	});
+	const renderSortButton = () => {
+		switch (sorting) {
+			case sortOptions.ASC:
+				return (
+					<button onClick={() => setSorting(sortOptions.DESC)}>
+						<SortAscSvg />
+					</button>
+				);
+			case sortOptions.DESC:
+				return (
+					<button onClick={() => setSorting(sortOptions.NONE)}>
+						<SortDescSvg />
+					</button>
+				);
+			default:
+				return (
+					<button onClick={() => setSorting(sortOptions.ASC)}>
+						<SortSvg />
+					</button>
+				);
+		}
+	};
 	const actionHandler = async (currentAction, currentData) => {
 		setSelectedData({ action: currentAction, data: currentData });
 	};
@@ -97,22 +122,35 @@ const DataTable = ({ apiData }) => {
 	}, [paginationData]);
 	useEffect(() => {
 		if (apiData?.length) {
+			let sortedApiData = [...apiData];
 			switch (sorting) {
 				case sortOptions.ASC:
-					apiData.sort((a, b) => (a.name > b.name ? -1 : 1));
+					sortedApiData.sort((a, b) => (a.name > b.name ? 1 : -1));
+					setApiList(
+						sortedApiData.slice(
+							paginationData.offset,
+							paginationData.offset + paginationData.limit
+						)
+					);
 					break;
 				case sortOptions.DESC:
-					apiData.sort((a, b) => (a.name > b.name ? 1 : -1));
+					sortedApiData.sort((a, b) => (a.name > b.name ? -1 : 1));
+					setApiList(
+						sortedApiData.slice(
+							paginationData.offset,
+							paginationData.offset + paginationData.limit
+						)
+					);
 					break;
 				default:
+					setApiList(
+						apiData.slice(
+							paginationData.offset,
+							paginationData.offset + paginationData.limit
+						)
+					);
 					break;
 			}
-			setApiList(
-				apiData.slice(
-					paginationData.offset,
-					paginationData.offset + paginationData.limit
-				)
-			);
 		}
 	}, [apiData, paginationData, sorting]);
 	return (
@@ -123,7 +161,10 @@ const DataTable = ({ apiData }) => {
 					<tr>
 						<th></th>
 						<th>ID</th>
-						<th>Name</th>
+						<th>
+							Name
+							{renderSortButton()}
+						</th>
 						<th>Type</th>
 						<th>Description</th>
 						<th>Created at</th>

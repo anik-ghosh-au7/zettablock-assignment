@@ -15,6 +15,7 @@ export const paginationActions = {
 };
 
 export const sortOptions = {
+	NONE: 'NONE',
 	ASC: 'ASC',
 	DESC: 'DESC',
 };
