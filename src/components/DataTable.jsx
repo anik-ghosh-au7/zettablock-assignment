@@ -25,6 +25,7 @@ const DataTable = ({
 	searchData,
 	setSearchData,
 	deleteApiData,
+	editApiData,
 }) => {
 	const [apiList, setApiList] = useState([]);
 	const [maxPages, setMaxPages] = useState(1);

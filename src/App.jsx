@@ -35,6 +35,16 @@ const App = () => {
 		);
 		fetchApiData();
 	};
+	const editApiData = async (dataId, description) => {
+		await fetch(
+			`https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis/${dataId}`,
+			{
+				method: 'PUT',
+				body: JSON.stringify({ description }),
+			}
+		);
+		fetchApiData();
+	};
 	useEffect(() => {
 		fetchApiData();
 	}, []);
@@ -69,6 +79,7 @@ const App = () => {
 			searchData={searchData}
 			setSearchData={setSearchData}
 			deleteApiData={deleteApiData}
+			editApiData={editApiData}
 		/>
 	);
 };
