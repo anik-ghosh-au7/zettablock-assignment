@@ -27,6 +27,10 @@ const App = () => {
 		// setApiRawData(dummyData);
 	};
 	const deleteApiData = async (dataId) => {
+		const dataIndex = apiData.findIndex((data) => data.id === dataId);
+		const apiDataCopy = [...apiData];
+		apiDataCopy.splice(dataIndex, 1);
+		setApiData(apiDataCopy);
 		await fetch(
 			`https://62a6bb9697b6156bff7e6251.mockapi.io/v1/apis/${dataId}`,
 			{
