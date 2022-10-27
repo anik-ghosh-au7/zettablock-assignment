@@ -250,7 +250,7 @@ const DataTable = ({
 						);
 						return (
 							<Fragment key={data.id}>
-								<tr key={data.id}>
+								<tr>
 									<td data-column="actions">
 										<div>
 											<button
