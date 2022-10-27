@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './app.style.css';
 import DataTable from './components/DataTable';
 import { searchOptions, sortOptions } from './constants';
-import { dummyData } from './data/dummyData';
 
 const App = () => {
 	const [apiRawData, setApiRawData] = useState([]);
@@ -22,9 +21,6 @@ const App = () => {
 				setApiRawData(responseData);
 			}
 		}
-
-		//for testing
-		// setApiRawData(dummyData);
 	};
 	const deleteApiData = async (dataId) => {
 		const dataIndex = apiData.findIndex((data) => data.id === dataId);

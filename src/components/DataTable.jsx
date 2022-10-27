@@ -6,6 +6,7 @@ import {
 	sortOptions,
 	searchOptions,
 } from '../constants';
+import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
 import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
 import { ReactComponent as EditSvg } from '../icons/edit.svg';
 import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
@@ -17,7 +18,8 @@ import { ReactComponent as SortDescSvg } from '../icons/sortdesc.svg';
 import { ReactComponent as SearchSvg } from '../icons/search.svg';
 import { ReactComponent as ClearSvg } from '../icons/clear.svg';
 import { ReactComponent as SaveSvg } from '../icons/save.svg';
-import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
+import { ReactComponent as UndoSvg } from '../icons/undo.svg';
+import { ReactComponent as RedoSvg } from '../icons/redo.svg';
 
 const DataTable = ({
 	apiData = [],
@@ -303,16 +305,26 @@ const DataTable = ({
 									<td data-column="description">
 										{selectedData.data?.id === data.id &&
 										selectedData.action === actionTypes.EDIT ? (
-											<input
-												ref={descriptionInputRef}
-												value={selectedData.data.description}
-												onChange={descriptionInputHandler}
-												onKeyPress={(e) => {
-													if (e.key === 'Enter') {
-														actionHandler(actionTypes.SAVE, data);
-													}
-												}}
-											></input>
+											<div>
+												<input
+													ref={descriptionInputRef}
+													value={selectedData.data.description}
+													onChange={descriptionInputHandler}
+													onKeyPress={(e) => {
+														if (e.key === 'Enter') {
+															actionHandler(actionTypes.SAVE, data);
+														}
+													}}
+												></input>
+												<div>
+													<button onClick={() => {}}>
+														<UndoSvg />
+													</button>
+													<button onClick={() => {}}>
+														<RedoSvg />
+													</button>
+												</div>
+											</div>
 										) : (
 											data.description
 										)}
