@@ -25,3 +25,8 @@ export const searchOptions = {
 	SEARCH: 'SEARCH',
 	CLEAR: 'CLEAR',
 };
+
+export const stashOperations = {
+	UNDO: 'UNDO',
+	REDO: 'REDO',
+};

@@ -5,21 +5,24 @@ import {
 	paginationActions,
 	sortOptions,
 	searchOptions,
+	stashOperations,
 } from '../constants';
+import {
+	DeleteSvg,
+	EditSvg,
+	MaximizeSvg,
+	MinimizeSvg,
+	CopySvg,
+	SortSvg,
+	SortAscSvg,
+	SortDescSvg,
+	SearchSvg,
+	ClearSvg,
+	SaveSvg,
+	UndoSvg,
+	RedoSvg,
+} from '../icons';
 import { formatDateStr, copyTextToClipboard, getMaxPages } from '../utils';
-import { ReactComponent as DeleteSvg } from '../icons/delete.svg';
-import { ReactComponent as EditSvg } from '../icons/edit.svg';
-import { ReactComponent as MaximizeSvg } from '../icons/maximize.svg';
-import { ReactComponent as MinimizeSvg } from '../icons/minimize.svg';
-import { ReactComponent as CopySvg } from '../icons/copy.svg';
-import { ReactComponent as SortSvg } from '../icons/sort.svg';
-import { ReactComponent as SortAscSvg } from '../icons/sortasc.svg';
-import { ReactComponent as SortDescSvg } from '../icons/sortdesc.svg';
-import { ReactComponent as SearchSvg } from '../icons/search.svg';
-import { ReactComponent as ClearSvg } from '../icons/clear.svg';
-import { ReactComponent as SaveSvg } from '../icons/save.svg';
-import { ReactComponent as UndoSvg } from '../icons/undo.svg';
-import { ReactComponent as RedoSvg } from '../icons/redo.svg';
 
 const DataTable = ({
 	apiData = [],
@@ -31,6 +34,10 @@ const DataTable = ({
 	editApiData,
 }) => {
 	const descriptionInputRef = useRef(null);
+	const [stash, setStash] = useState({
+		pointer: 0,
+		data: [],
+	});
 	const [apiList, setApiList] = useState([]);
 	const [maxPages, setMaxPages] = useState(1);
 	const [paginationData, setPaginationData] = useState({
@@ -102,6 +109,10 @@ const DataTable = ({
 			await deleteApiData(currentData.id);
 		}
 		if (currentAction === actionTypes.SAVE) {
+			setStash({
+				pointer: 0,
+				data: [],
+			});
 			await editApiData(currentData.id, selectedData.data.description);
 		}
 	};
@@ -176,7 +187,47 @@ const DataTable = ({
 				description: e.target.value,
 			},
 		});
+		setStash({
+			pointer: stash.pointer + 1,
+			data: [...stash.data, e.target.value],
+		});
 	};
+	const stashHandler = (operation) => {
+		let pointer;
+		switch (operation) {
+			case stashOperations.UNDO:
+				pointer = stash.pointer - 1;
+				setStash({ ...stash, pointer });
+				setSelectedData({
+					...selectedData,
+					data: {
+						...selectedData.data,
+						description: stash.data[pointer],
+					},
+				});
+				break;
+			case stashOperations.REDO:
+				pointer = stash.pointer + 1;
+				setStash({ ...stash, pointer });
+				setSelectedData({
+					...selectedData,
+					data: {
+						...selectedData.data,
+						description: stash.data[pointer],
+					},
+				});
+				break;
+			default:
+				break;
+		}
+	};
+	useEffect(() => {
+		selectedData?.data?.id &&
+			setStash({
+				...stash,
+				data: [selectedData.data.description],
+			});
+	}, [selectedData?.data?.id]);
 	useEffect(() => {
 		if (selectedData.action === actionTypes.EDIT && descriptionInputRef) {
 			descriptionInputRef.current.focus();
@@ -317,10 +368,19 @@ const DataTable = ({
 													}}
 												></input>
 												<div>
-													<button onClick={() => {}}>
+													<button
+														disabled={stash.pointer <= 0}
+														onClick={() => stashHandler(stashOperations.UNDO)}
+													>
 														<UndoSvg />
 													</button>
-													<button onClick={() => {}}>
+													<button
+														disabled={
+															stash.data.length === 0 ||
+															stash.pointer >= stash.data.length - 1
+														}
+														onClick={() => stashHandler(stashOperations.REDO)}
+													>
 														<RedoSvg />
 													</button>
 												</div>
