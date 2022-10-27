@@ -220,6 +220,14 @@ th:nth-child(3) > button {
 	white-space: pre;
 }
 
+[data-column='description'] > input {
+	height: 25px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding-left: 10px;
+}
+
 @media only screen and (max-width: 1250px) {
 	.container {
 		width: 95%;
