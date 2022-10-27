@@ -32,6 +32,7 @@ const DataTable = ({
 	setSearchData,
 	deleteApiData,
 	editApiData,
+	title,
 }) => {
 	const descriptionInputRef = useRef(null);
 	const [stash, setStash] = useState({
@@ -262,7 +263,7 @@ const DataTable = ({
 	return (
 		<div className="container">
 			<div>
-				<h2>APIs: </h2>
+				<h2>{title}</h2>
 				<input
 					type="text"
 					value={searchData.searchText}

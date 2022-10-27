@@ -30,3 +30,8 @@ export const stashOperations = {
 	UNDO: 'UNDO',
 	REDO: 'REDO',
 };
+
+export const tabOptions = {
+	API: 'tab-1',
+	DUMMY: 'tab-2',
+};

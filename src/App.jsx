@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './app.style.css';
 import DataTable from './components/DataTable';
-import { searchOptions, sortOptions } from './constants';
+import { searchOptions, sortOptions, tabOptions } from './constants';
+import { dummyData } from './dummyData';
 
 const App = () => {
 	const [apiRawData, setApiRawData] = useState([]);
+	const [activeTab, setActiveTab] = useState(tabOptions.API);
 	const [apiData, setApiData] = useState();
 	const [sortData, setSortData] = useState(sortOptions.NONE);
 	const [searchData, setSearchData] = useState({
@@ -79,15 +81,68 @@ const App = () => {
 		setApiData(formattedData);
 	}, [sortData, searchData, apiRawData]);
 	return (
-		<DataTable
-			apiData={apiData}
-			sortData={sortData}
-			setSortData={setSortData}
-			searchData={searchData}
-			setSearchData={setSearchData}
-			deleteApiData={deleteApiData}
-			editApiData={editApiData}
-		/>
+		<div className="tabs">
+			<nav className="tabs__nav" role="tablist">
+				<button
+					className={`tabs__btn ${
+						activeTab === tabOptions.API ? 'is-active' : ''
+					}`}
+					type="button"
+					role="tab"
+					onClick={() => setActiveTab(tabOptions.API)}
+				>
+					Tab #1
+				</button>
+				<button
+					className={`tabs__btn ${
+						activeTab === tabOptions.DUMMY ? 'is-active' : ''
+					}`}
+					type="button"
+					role="tab"
+					onClick={() => setActiveTab(tabOptions.DUMMY)}
+				>
+					Tab #2
+				</button>
+			</nav>
+			<div className="tabs__content">
+				<div
+					className={`tabs__pane ${
+						activeTab === tabOptions.API ? 'is-visible' : ''
+					}`}
+					id="tab-1"
+					role="tabpanel"
+				>
+					<DataTable
+						title="APIs Data:"
+						apiData={apiData}
+						sortData={sortData}
+						setSortData={setSortData}
+						searchData={searchData}
+						setSearchData={setSearchData}
+						deleteApiData={deleteApiData}
+						editApiData={editApiData}
+					/>
+				</div>
+				<div
+					className={`tabs__pane ${
+						activeTab === tabOptions.DUMMY ? 'is-visible' : ''
+					}`}
+					id="tab-2"
+					role="tabpanel"
+				>
+					<DataTable
+						title="Dummy Data:"
+						apiData={dummyData}
+						sortData={sortData}
+						setSortData={setSortData}
+						searchData={searchData}
+						setSearchData={setSearchData}
+						deleteApiData={deleteApiData}
+						editApiData={editApiData}
+					/>
+				</div>
+			</div>
+		</div>
 	);
 };
 

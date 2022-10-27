@@ -122,7 +122,7 @@ th:nth-child(3) > button {
 	padding: 6px 12px;
 	margin-left: -1px;
 	line-height: 1.5;
-	color: #337ab7;
+	color: #3498db;
 	background-color: #fff;
 	border: 1px solid #ddd;
 	cursor: pointer;
@@ -260,6 +260,49 @@ th:nth-child(3) > button {
 [data-column='description'] > div > div > button:disabled {
 	background-color: #eee;
 	cursor: no-drop;
+}
+
+.tabs {
+	border: 1px solid rgba(0, 0, 0, 0.125);
+	border-radius: 0.25rem;
+}
+.tabs__nav {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+	background-color: #fafafa;
+}
+.tabs__btn {
+	all: unset;
+	position: relative;
+	padding: 1rem 1.25rem;
+	cursor: pointer;
+	transition: opacity 0.3s;
+	opacity: 0.6;
+}
+.tabs__btn.is-active {
+	opacity: 1;
+	color: #3498db;
+	background-color: #fff;
+	border-right: 1px solid rgba(0, 0, 0, 0.125);
+	border-left: 1px solid rgba(0, 0, 0, 0.125);
+}
+.tabs__btn.is-active::after {
+	content: '';
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	height: 1px;
+	width: 100%;
+	background-color: #fff;
+}
+.tabs__btn:first-child.is-active {
+	border-left: none;
+}
+.tabs__pane {
+	display: none;
+	padding: 2rem 1.25rem;
+}
+.tabs__pane.is-visible {
+	display: block;
 }
 
 @media only screen and (max-width: 1250px) {
